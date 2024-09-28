@@ -1,0 +1,119 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: qaq
+
+resources:
+  - namespace.yaml
+  - ingress.yaml
+  - database.yaml
+  - ./docs
+  - ./gateway
+  - ./upload
+  - ./static
+  - ./uniauth
+  - ./uniauth-web 
+
+secretGenerator:
+  - name: qaq
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - FEISHU_APP_ID=qaq
+      - FEISHU_APP_SECRET=qaq
+      - FEISHU_ENCRYPT_KEY=qaq
+      - FEISHU_VERIFICATION_TOKEN=qaq
+      - MYSQL_SERVER=192.168.0.1
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=qard123@qaq
+      - QAQ_ADMIN=qaq
+      - QAQ_HOST=openqaq.fun
+    files:
+      - RSA_PUBLICKEY=./public_key.pem
+      - RSA_PRIVATEKEY=./private_key.pem
+  - name: imagepullsecret
+    options:
+      disableNameSuffixHash: true
+    files:
+      - .dockerconfigjson=./config.json
+    type: kubernetes.io/dockerconfigjson
+  - name: upload
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - DEBUG=False
+      - S3_SERVER=https://minio.openqaq.fun
+      - S3_ACCESSKEY=qaq
+      - S3_SECRET=qaq
+      - S3_BUCKET=qaq
+      - S3_VENDER=minio
+
+configMapGenerator:
+  - name: qaq
+    options:
+      disableNameSuffixHash: true
+    literals:
+      - MYSQL_SERVER=192.168.0.1
+      - MYSQL_PORT=3306
+      - QAQ_ADMIN=qqq
+      - QAQ_HOST=openqaq.fun
+      - ingressClassName=nginx
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: qaq
+      fieldPath: data.ingressClassName
+    targets:
+      - select:
+          kind: Ingress
+          name: ingress
+        fieldPaths:
+          - spec.ingressClassName
+      - select:
+          kind: Ingress
+          name: static
+        fieldPaths:
+          - spec.ingressClassName
+  - source:
+      kind: ConfigMap
+      name: qaq
+      fieldPath: data.QAQ_HOST
+    targets:
+      - select:
+          kind: Ingress
+          name: ingress
+        fieldPaths:
+          - spec.rules.*.host
+      - select:
+          kind: Ingress
+          name: static
+        fieldPaths:
+          - spec.rules.*.host
+  - source:
+      kind: ConfigMap
+      name: qaq
+      fieldPath: data.MYSQL_SERVER
+    targets:
+      - select:
+          kind: Endpoints
+          name: mysql-svc
+        fieldPaths:
+          - subsets.0.addresses.0.ip
+  - source:
+      kind: ConfigMap
+      name: qaq
+      fieldPath: data.MYSQL_PORT
+    targets:
+      - select:
+          kind: Service
+          name: mysql-svc
+        fieldPaths:
+          - spec.ports.0.port
+          - spec.ports.0.targetPort
+      - select:
+          kind: Endpoints
+          name: mysql-svc
+        fieldPaths:
+          - subsets.0.ports.0.port

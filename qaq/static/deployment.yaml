@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: static
+  template:
+    metadata:
+      labels:
+        app: static
+    spec:
+      imagePullSecrets:
+        - name: imagepullsecret
+      containers:
+        - name: static
+          image: blacklee123/static
+          imagePullPolicy: Always
+          command:
+            - /app/static
+            - /app/public
+          ports:
+            - containerPort: 8000
+          env:
+            - name: FEISHU_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: FEISHU_APP_ID
+            - name: FEISHU_APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: FEISHU_APP_SECRET
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /app/public
+              name: nfs-pvc
+      volumes:
+        - name: nfs-pvc
+          persistentVolumeClaim:
+            claimName: static-pvc

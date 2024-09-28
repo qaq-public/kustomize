@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: upload
+  template:
+    metadata:
+      labels:
+        app: upload
+    spec:
+      imagePullSecrets:
+        - name: imagepullsecret
+      containers:
+        - name: upload
+          image: blacklee123/upload
+          imagePullPolicy: Always
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: "upload.settings"
+            - name: QAQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: QAQ_HOST
+            - name: MYSQL_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: MYSQL_SERVER
+            - name: MYSQL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: MYSQL_PORT
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: qaq
+                  key: MYSQL_PASSWORD
+            - name: DEBUG
+              value: "True"
+            - name: S3_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: upload
+                  key: S3_SERVER
+            - name: S3_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: upload
+                  key: S3_ACCESSKEY
+            - name: S3_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: upload
+                  key: S3_SECRET
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: upload
+                  key: S3_BUCKET
+            - name: S3_VENDER
+              valueFrom:
+                secretKeyRef:
+                  name: upload
+                  key: S3_VENDER
+          command:
+            - gunicorn
+            - upload.wsgi:application
+            - --bind=0.0.0.0:8000
+            - --log-level=info
+            - --log-file=-
+            - --access-logfile=-
+            - --error-logfile=-
+            - --worker-class=gevent
+            - --threads=4
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 8000

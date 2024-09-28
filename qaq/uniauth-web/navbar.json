@@ -1,0 +1,143 @@
+{
+  "code": 0,
+  "message": "navbar.json",
+  "data": [
+    {
+      "name": "效能工具",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "name": "客户端性能测试",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "name": "code server",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "name": "服务端性能测试",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "压测平台",
+          "url": "https://www.google.com",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "name": "基础服务",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "测试用例管理平台",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "包体管理平台",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "静态文件服务",
+          "url": "https://qaq.openqaq.fun/static/",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "name": "常用链接",
+      "url": "",
+      "disabled": false,
+      "children": [
+        {
+          "name": "GitLab",
+          "url": "https://gitlab.openqaq.fun",
+          "disabled": false
+        },
+        {
+          "name": "Jenkins",
+          "url": "https://jenkins.openqaq.fun",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        },
+        {
+          "name": "Google",
+          "url": "https://www.google.com",
+          "disabled": false
+        }
+      ]
+    }
+  ]
+}

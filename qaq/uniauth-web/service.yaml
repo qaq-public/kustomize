@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uniauth-web
+spec:
+  selector:
+    app: uniauth-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

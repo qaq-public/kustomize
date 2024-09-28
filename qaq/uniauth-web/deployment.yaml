@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uniauth-web
+spec:
+  replicas: 1
+  minReadySeconds: 3
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: uniauth-web
+  template:
+    metadata:
+      labels:
+        app: uniauth-web
+    spec:
+      containers:
+        - name: uniauth-web
+          image: blacklee123/uniauth-web
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: uniauth-web-conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: uniauth-web-conf
+              mountPath: /usr/share/nginx/html/env.js
+              subPath: env.js
+              readOnly: true
+            - name: uniauth-web-conf
+              mountPath: /usr/share/nginx/html/navbar.json
+              subPath: navbar.json
+              readOnly: true
+      volumes:
+        - name: uniauth-web-conf
+          configMap:
+            name: uniauth-web-conf
